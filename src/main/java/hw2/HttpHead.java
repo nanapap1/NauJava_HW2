@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class HttpHead {
 
 
             ObjectMapper mapper = new ObjectMapper();
-            Map<?, ?> json = mapper.readValue(response.body(), Map.class);
+            HashMap<String, HashMap> json = mapper.readValue(response.body(), HashMap.class);
 
             Map<String, String> headers = (Map<String, String>) json.get("headers");
 

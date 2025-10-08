@@ -18,6 +18,7 @@ public class ReleaseTask implements Task{
     private Path newDir;
     private WatchService watchServiceFirst;
     private WatchService watchServiceSecondt;
+    private volatile boolean running = false;
 
     ReleaseTask(String oldDir,String newDir) {
         this.oldDir = Path.of(oldDir);
@@ -31,9 +32,9 @@ public class ReleaseTask implements Task{
                 Path newFile = newdir.resolve(oldFile.getFileName());
                 Files.copy(oldFile, newFile);
                 if (newdir.equals(this.newDir))
-                    System.out.print("Добавлено во вторую директорию: ");
-                else
                     System.out.print("Добавлено в первую директорию: ");
+                else
+                     System.out.print("Добавлено во вторую директорию: ");
                 System.out.println(oldFile.getFileName());
             }
         }
@@ -50,9 +51,9 @@ public class ReleaseTask implements Task{
                 Path target = newdir.resolve(oldFile.getFileName());
                 Files.copy(oldFile, target, REPLACE_EXISTING, COPY_ATTRIBUTES);
                 if (newdir.equals(this.newDir))
-                    System.out.print("Изменено во второй директории: ");
-                else
                     System.out.print("Изменено в первой директории: ");
+                else
+                    System.out.print("Изменено во второй директории: ");
                 System.out.println(oldFile.getFileName());
             }
         } catch (IOException e) {
@@ -67,9 +68,9 @@ public class ReleaseTask implements Task{
                 Path target = newdir.resolve(oldFile.getFileName());
                 if (Files.deleteIfExists(target)) {
                     if (newdir.equals(this.newDir))
-                        System.out.print("Удалено из второй директории: ");
-                    else
                         System.out.print("Удалено из первой директории: ");
+                    else
+                        System.out.print("Удалено из второй директории: ");
                     System.out.println(oldFile.getFileName());
                 }
             }
@@ -92,7 +93,7 @@ public class ReleaseTask implements Task{
                 addFile(oldFile,this.oldDir);
             }
         }
-
+        this.running = true;
         this.watchServiceFirst = FileSystems.getDefault().newWatchService();
         this.oldDir.register(
                 watchServiceFirst, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
@@ -132,7 +133,7 @@ public class ReleaseTask implements Task{
                     }
             }
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException  | ClosedWatchServiceException e) {
             watchServiceFirst.close();
             watchServiceSecondt.close();
         }
@@ -141,6 +142,7 @@ public class ReleaseTask implements Task{
 
     public void stop() {
         try {
+            running = false;
             watchServiceFirst.close();
             watchServiceSecondt.close();
         }
@@ -154,8 +156,13 @@ public class ReleaseTask implements Task{
     {
 
             ReleaseTask check = new ReleaseTask("src/main/resources/num1","src/main/resources/num2");
-            Scanner in = new Scanner(System.in);
+
+            new Thread(() -> {
+              new Scanner(System.in).nextLine(); // нажмите Enter, чтобы остановить
+              check.stop();
+            }, "stop").start();
             check.start();
+
 
 
 
