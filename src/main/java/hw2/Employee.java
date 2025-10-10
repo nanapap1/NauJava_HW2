@@ -56,29 +56,4 @@ public class Employee {
         return String.format("Имя: %s, Возраст: %d, Отдел: %s, Зарплата: %.1f",this.fullname,this.age,this.departament,this.salary);
     }
 
-
-    public static void main(String[] args) {
-        Employee one = new Employee("Иван Сергеев",32,"PR",60555.0);
-        Employee two = new Employee("Илья Петров",28,"QA",45345.2);
-        Employee three = new Employee("Марк Иванов",27,"HR",45345.9);
-        Employee four = new Employee("Паша Крупник",25,"QA",58432.7);
-        Employee five = new Employee("Егор Федосеев",29,"QA", 67934.57);
-        Employee six = new Employee("Сергей Ильин",37,"PR", 77234.57);
-        List<Employee> employeesList = new ArrayList<>(List.of(one,two,three,four,five,six));
-        Arrays.stream(employeesList.toArray(Employee[]::new)).sorted(Comparator.comparingDouble(Employee::getSalary)).forEach(System.out::println);
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 }

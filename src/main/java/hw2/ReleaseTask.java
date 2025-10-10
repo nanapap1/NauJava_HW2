@@ -32,9 +32,9 @@ public class ReleaseTask implements Task{
                 Path newFile = newdir.resolve(oldFile.getFileName());
                 Files.copy(oldFile, newFile);
                 if (newdir.equals(this.newDir))
-                    System.out.print("Добавлено в первую директорию: ");
+                    System.out.print("Добавлено во вторую директорию: ");
                 else
-                     System.out.print("Добавлено во вторую директорию: ");
+                     System.out.print("Добавлено в первую директорию: ");
                 System.out.println(oldFile.getFileName());
             }
         }
@@ -51,9 +51,9 @@ public class ReleaseTask implements Task{
                 Path target = newdir.resolve(oldFile.getFileName());
                 Files.copy(oldFile, target, REPLACE_EXISTING, COPY_ATTRIBUTES);
                 if (newdir.equals(this.newDir))
-                    System.out.print("Изменено в первой директории: ");
+                    System.out.print("Изменено во вторую директории: ");
                 else
-                    System.out.print("Изменено во второй директории: ");
+                    System.out.print("Изменено в первую директории: ");
                 System.out.println(oldFile.getFileName());
             }
         } catch (IOException e) {
@@ -68,9 +68,9 @@ public class ReleaseTask implements Task{
                 Path target = newdir.resolve(oldFile.getFileName());
                 if (Files.deleteIfExists(target)) {
                     if (newdir.equals(this.newDir))
-                        System.out.print("Удалено из первой директории: ");
-                    else
                         System.out.print("Удалено из второй директории: ");
+                    else
+                        System.out.print("Удалено из первой директории: ");
                     System.out.println(oldFile.getFileName());
                 }
             }
@@ -149,23 +149,5 @@ public class ReleaseTask implements Task{
         catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    public static void main(String[] args) throws IOException
-    {
-
-            ReleaseTask check = new ReleaseTask("src/main/resources/num1","src/main/resources/num2");
-
-            new Thread(() -> {
-              new Scanner(System.in).nextLine(); // нажмите Enter, чтобы остановить
-              check.stop();
-            }, "stop").start();
-            check.start();
-
-
-
-
-
     }
 }

@@ -24,26 +24,4 @@ public class BubbleSort {
                     numbers.set(j+1,t);
                 }
     }
-
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        ArrayList<Double> array = BubbleSort.createArray(n);
-        System.out.println(array);
-        BubbleSort.bubbleSort(array);
-        System.out.println(array);
-
-        n = in.nextInt();
-        array = BubbleSort.createArray(n);
-        System.out.println(array);
-        BubbleSort.bubbleSort(array);
-        System.out.println(array);
-
-        n = in.nextInt();
-        array = BubbleSort.createArray(n);
-        System.out.println(array);
-        BubbleSort.bubbleSort(array);
-        System.out.println(array);
-
-    }
 }
